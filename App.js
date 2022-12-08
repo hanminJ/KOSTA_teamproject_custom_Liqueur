@@ -1,20 +1,21 @@
 import React from 'react';
-// eslint-disable-next-line 
-import Navbar from "./components/Navbar"
-import Carousel from "./components/Carousel"
-import Grid from "./components/Grid"
+import { BrowserRouter,Routes,Route } from 'react-router-dom'; 
+import Home from "./template/home"
+import Funding from "./template/funding"
+import Custom from "./template/custom"
+
 import './App.css';
 
 
 function App() {
   return (
-    <div>
-      
-      <Navbar/>
-      <Carousel/>
-      <Grid/>
-    </div>
-
+    <BrowserRouter>
+      <Routes>
+        <Route index element= {<Home/>}/>
+        <Route path="funding" element = {<Funding/>}/>
+        <Route path="custom" element = {<Custom/>}/>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
