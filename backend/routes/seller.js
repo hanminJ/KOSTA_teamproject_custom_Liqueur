@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./config/database');
+const db = require('../config/database');
 
 
 // seller 추가 등록 - 사업자 등록증으로 확인

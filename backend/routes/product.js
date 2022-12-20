@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./config/database');
+const db = require('../config/database');
 
 //펀딩 페이지  - 모든 상품들 받아옴
 router.get('/get', (req, res) => {
@@ -18,4 +18,4 @@ router.get('/get_by_id', (req, res) => {
       })
 
 
-module.exports = router;
+      module.exports = router;

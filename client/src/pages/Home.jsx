@@ -13,18 +13,47 @@ import customeImg from '../assets/images/custome.jpg';
 import Services from "../services/Services";
 import ProductsList from "../components/UI/ProductsList";
 
-const Home = () => {
+import Clock  from "../components/UI/Clock";
 
+import counterImg from '../assets/images/counter-timer-img.png';
+
+
+const Home = () => {
+  const [trendingProducts,setTrendingProducts] = useState([]);
+  const [bestSalesProducts,setBestSalesProducts] = useState([]);
+  const [mobileProducts, setMobileProducts] =useState([]);
+  const [wirelessProducts, setWirelessProducts] =useState([]);
+   const [popularProducts, setPopularProducts] =useState([]);
   
-  const [data,setData] = useState(products);
+  
   const year = new Date().getFullYear(); /*각해에 맞게 업데이트됨*/
 
   useEffect(()=>{
-    const filteredProducts = products.filter(
-      (item)=> item.category = "chair"
+    const filteredTrendingProducts = products.filter(
+      (item)=> item.category === "chair"
       );
 
-     setData(filteredProducts);
+     const filteredBestSalesProducts = products.filter(
+      (item)=> item.category === "sofa"
+      );
+
+      const filteredMobileProducts = products.filter(
+      (item)=> item.category === "mobile"
+      );
+
+      const filteredWirelessProducts = products.filter(
+      (item)=> item.category === "wireless"
+      );
+
+      const filteredPopularProducts = products.filter(
+      (item)=> item.category === "wireless"
+      );
+
+     setTrendingProducts(filteredTrendingProducts);
+     setBestSalesProducts(filteredBestSalesProducts);
+      setMobileProducts(filteredMobileProducts);
+       setWirelessProducts(filteredWirelessProducts);
+       setPopularProducts(filteredPopularProducts);
   },[]);
   return (
   <Helmet title={"Home"}>
@@ -57,9 +86,64 @@ const Home = () => {
     <Container>
       <Row>
         <Col lg='12' className="text-center">
-          <h2 className="section__title">신상품</h2>
+          <h2 className="section__title">최신 트렌드</h2>
         </Col>
-        <ProductsList data={data} />        
+        <ProductsList data={trendingProducts} />        
+        </Row>
+      </Container>
+    </section>
+    <section className="best__sales">
+      <Container>
+        <Row>
+        <Col lg='12' className="text-center">
+          <h2 className="section__title">Best Sales</h2>
+        </Col>  
+
+        <ProductsList data = {bestSalesProducts}/>
+        </Row>
+      </Container>
+    </section>
+    <section className="timer__count">
+    <Container>
+       
+      <Row> 
+        <Col lg='6' md='12' className="Count__down-col">
+         
+          <div className="Clock__top-content">
+          <h4 className="text-white fs-6 mb-2">Limited offers</h4>
+          <h3 className="text-white fs-5 mb-3">Quality Armchair</h3>
+          </div>
+          <Clock />
+          
+        <motion.button whileTap={{scale:1.2}} className="buy__btn store__btn">
+          <Link to="/shop">보러가기</Link>
+        </motion.button>
+        </Col>
+        <Col lg='6' md='12' className="text-end counter__img">
+          <img src={counterImg} alt="" />
+           </Col>
+      </Row>
+    </Container>
+    </section>
+    <section className="new__arrivals">
+      <Container>
+        <Row>
+          <Col lg='12' className="text-center mb-5">
+          <h2 className="section__title">신상품</h2>
+        </Col>  
+        <ProductsList data = {mobileProducts}/>
+         <ProductsList data = {wirelessProducts}/>
+        </Row>
+      </Container>
+    </section>
+    <section className="popular__category">
+       <Container>
+        <Row>
+          <Col lg='12' className="text-center mb-5">
+          <h2 className="section__title">인기 상품</h2>
+        </Col>  
+        <ProductsList data = {popularProducts}/>
+         <ProductsList data = {wirelessProducts}/>
         </Row>
       </Container>
     </section>

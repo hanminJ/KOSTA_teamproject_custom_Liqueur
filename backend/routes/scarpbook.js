@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./config/database');
+const db = require('../config/database');
 
 // 카트 추가!
 router.post('/add', (req, res) => {

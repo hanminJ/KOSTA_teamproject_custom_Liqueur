@@ -6,7 +6,7 @@ var express = require('express')
 , NaverStrategy = require('passport-naver').Strategy;
 
 const db   = require('../config/database');
-var template = require('./template.js');
+
 
 passport.serializeUser(function(user, done) { //인증 요청 이후 세션기록
 	done(null, user);
@@ -23,8 +23,9 @@ passport.use(new NaverStrategy({
     callbackURL: 'http://localhost:8080/callback'
 },
 function(accessToken, refreshToken, profile, done) {
-  let email = profile._json.email;
-  db.query('SELECT * from user where email =?',[email], (error, results, fields) => {
+  console.log(profile._json.id)
+  let provider_id = profile._json.id;
+  db.query('SELECT * from user where provider_id =?',[provider_id], (error, results, fields) => {
 
     if (error) throw error;
     if (results) {   // db에서의 반환값이 있으면 로그인 성공
@@ -56,7 +57,8 @@ if (!user) {
 req.session.joinUser = {
   email: profile._json.email,
   nickname: profile._json.nickname,
-  profile: profile._json.age,
+  age: profile._json.age,
+  id: profile._json.id,
 };
 return req.session.save(() => {
   // 세션이 생성되면 사용자를 회원가입 페이지로 리다이렉트 시킨다.
@@ -74,6 +76,7 @@ req.session.is_logined = true;
 req.session.user_id = user[0].user_id;
 
 req.session.save(function () {
+
     res.redirect(`/`);
 });
 
@@ -96,18 +99,16 @@ function ensureAuthenticated(req, res, next) {
 
 // 회원가입 프로세스 아직 미완료
 router.post('/register', function(req, res) {    
-    var email = req.body.email;
-    var birth = req.body.birth;    
-    var nickname = req.body.nickname;
+    var email = req.session.joinUser.email;
+    var id = req.session.joinUser.id;   
+    var age = req.session.joinUser.age;
+    var nickname = req.session.joinUser.nickname;
 
     if (email && birth && nickname) {
-        db.query('INSERT INTO user (email, birth,nickname) VALUES(?,?,?)', [email, birth, nickname], function (error, data) {
+        db.query('INSERT INTO user (email, age,nickname,provider_id) VALUES(?,?,?)', [email, age,nickname, id], function (error, data) {
                     if (error) throw error2;
-                    req.session.is_logined = true;
-                    req.session.nickname = nickname;
-                    req.session.save(function () {
-                        res.send(`<script type="text/javascript">alert("회원가입이 완료되었습니다!");</script>`);
-                    });
+                        res.send(`<script type="text/javascript">alert("회원가입이 완료되었습니다! 다시 로그인해주세요");</script>`);
+                        res.redirect("/");
                     
                 });
             } 

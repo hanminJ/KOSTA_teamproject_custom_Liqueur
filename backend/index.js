@@ -3,6 +3,7 @@ const session = require('express-session')
 const bodyParser = require('body-parser');
 const FileStore = require('session-file-store')(session)
 const cors = require('cors');
+
 var authRouter = require('./routes/auth');
 var authCheck = require('./routes/authCheck.js');
 var inquiry = require('./routes/QnA(inquiry).js');
@@ -10,6 +11,7 @@ var product = require('./routes/product.js');
 var order = require('./routes/order.js');
 var scarpbook = require('./routes/scarpbook.js');
 var review = require('./routes/review.js');
+
 const db = require('./config/database');
 
 const app = express()
@@ -31,10 +33,9 @@ saveUninitialized: true
 }));
 
 // 인증 라우터
-app.use('/users', authRouter);
-app.use('/products',product);
-app.use('/cart',cart);
-app.use('/authcheck',authCheck); 
+app.use('/', authRouter);//네이버 인증
+
+app.use('/products',product); 
 app.use('/scarpbook',scarpbook)
 app.use('/order',order)
 app.use('/inquiry',inquiry)

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./config/database');
+const db = require('../config/database');
 
 //QnA 댓글 작성 - 구매여부 및 비밀글 체크, 대답여부는 컬럼제거
 router.post('/inquiry', function(req, res) {    

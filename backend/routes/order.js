@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./config/database');
+const db = require('../config/database');
 
 // 구매시 status =1로 구매 표시 , price 컬럼 추가
 router.post('/buy', (req, res) => {
@@ -17,7 +17,7 @@ router.post('/buy', (req, res) => {
 
   })
   //취소시 status = 0으로 표시 
-  router.Update('/cancel', (req, res) => {
+  router.post('/cancel', (req, res) => {
     var order_id =req.body.order_id;
     db.query('update order set status = 0 where ordr_id = ?', [order_id], function (error, data) {
         if(error) console.log(error);
@@ -33,4 +33,4 @@ router.post('/buy', (req, res) => {
 })
 
 
-  module.exports = router;
+module.exports = router;

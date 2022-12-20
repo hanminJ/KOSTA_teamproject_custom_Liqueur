@@ -15,6 +15,7 @@
   --web-color : #000000;
   --web-whitecolor : #ffffff;
   --white- : #fff;
+  --rating-color: #ff7f50;
 }
 
 /* reset browser default */
@@ -69,4 +70,10 @@ section{
 .section__title{
   color: var(--primary-color);
   font-weight: 600;
+}
+
+@media only screen and (max-width: 768px){
+  section{
+    padding: 40px 0px;
+  }
 }
