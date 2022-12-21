@@ -1,8 +1,7 @@
 import React, {useState,useRef} from "react";
-
+import axios from 'axios';
 import {Container, Row,Col} from "reactstrap";
 import { useParams } from "react-router-dom";
-import products from "../assets/data/products";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import "../styles/product-details.css";
@@ -20,13 +19,39 @@ const  ProductDetails = () => {
   const reviewMsg = useRef("");
   const dispatch = useDispatch()
 
+  const [productsData, setProductsData] = useState([]);
   const[rating,setRating] = useState(null);
-  const {id} = useParams();
-  const product = products.find(item=> item.id ===id);
+  const {id} = useParams()
 
+  useEffect(function(){
+      axios.get(`http://localhost:8080/products/get_by_id`,{params: {product_id:id}},{ withCredentials: true })
+      .then(result=> {
+          console.log(result);
+          const data = result.data;
+          console.log(data);
+          setProductsData(data);
+      })
+      .catch(e=> {
+          console.log(e);
+      })
+  }, [id])
+
+
+    // axios.post(`http://localhost:8080/products/get_by_id`,{product:'2'}).then((res) => {
+    //   console.log(res);
+    //   let products= res.data;
+    //   setProductsData(products)
+    // });
+ 
+
+
+
+
+  const product = productsData;
+  console.log(productsData)
   const {
-    imgUrl, 
-    productName,
+    image, 
+    title,
     price, 
     avgRating,
     reviews, 
@@ -34,8 +59,8 @@ const  ProductDetails = () => {
     shortDesc,
     category
     } = product;
-
-    const relatedProducts = products.filter(item=> item.category===category);
+    
+    const relatedProducts = productsData.filter(item=> item.category===category);
 
     const submitHandler =(e)=>{
       e.preventDefault();
@@ -59,8 +84,8 @@ const  ProductDetails = () => {
       dispatch(
         cartActions.addItem({
         id,
-        image:imgUrl,
-        productName,
+        image,
+        title,
         price,
       })
       );
@@ -72,18 +97,18 @@ const  ProductDetails = () => {
     window.scrollTo(0,0);
   }, [product]);
   return (
-          <Helmet title={productName}>{/*상품명이 헤더에 나옴*/}
-            <CommonSection title={productName}/>
+          <Helmet title={title}>{/*상품명이 헤더에 나옴*/}
+            <CommonSection title={title}/>
             <section className="pt-0">
               <Container>
                 <Row>
                   <Col lg="6">
-                    <img src={imgUrl} alt="" />
+                    <img src={image} alt="" />
                   </Col>
 
                   <Col lg="6">
                     <div className="product__details">
-                      <h2>{productName}</h2>
+                      <h2>{title}</h2>
                       <div className="product__rating d-flex align-items-center gap-5 mb-3">
                         <div>
                           <span ><i class="ri-star-s-fill"></i></span>

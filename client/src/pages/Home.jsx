@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-
+import axios from 'axios';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import products from '../assets/data/products';
@@ -19,8 +19,24 @@ import counterImg from '../assets/images/counter-timer-img.png';
 
 
 const Home = () => {
+  
   const [trendingProducts,setTrendingProducts] = useState([]);
   const [bestSalesProducts,setBestSalesProducts] = useState([]);
+
+  useEffect(() => {
+  axios.get('http://localhost:8080/products/trending').then((res)=>{
+    let trend= res.data
+    setTrendingProducts(trend);
+  })},[])
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/products/hotsale').then((res)=>{
+
+      let hot= res.data
+      setBestSalesProducts(hot);
+    })},[])
+
+
   const [mobileProducts, setMobileProducts] =useState([]);
   const [wirelessProducts, setWirelessProducts] =useState([]);
    const [popularProducts, setPopularProducts] =useState([]);
@@ -29,14 +45,6 @@ const Home = () => {
   const year = new Date().getFullYear(); /*각해에 맞게 업데이트됨*/
 
   useEffect(()=>{
-    const filteredTrendingProducts = products.filter(
-      (item)=> item.category === "chair"
-      );
-
-     const filteredBestSalesProducts = products.filter(
-      (item)=> item.category === "sofa"
-      );
-
       const filteredMobileProducts = products.filter(
       (item)=> item.category === "mobile"
       );
@@ -49,12 +57,11 @@ const Home = () => {
       (item)=> item.category === "wireless"
       );
 
-     setTrendingProducts(filteredTrendingProducts);
-     setBestSalesProducts(filteredBestSalesProducts);
       setMobileProducts(filteredMobileProducts);
        setWirelessProducts(filteredWirelessProducts);
        setPopularProducts(filteredPopularProducts);
   },[]);
+  
   return (
   <Helmet title={"Home"}>
     <section className="hero__section">

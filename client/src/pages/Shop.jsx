@@ -1,48 +1,54 @@
-import React,{useState} from "react";
-
+import React,{useState,useEffect} from "react";
+import axios from 'axios';
 import CommonSection from "../components/UI/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import { Container,Row,Col } from "reactstrap";
 
 import "../styles/shop.css";
 
-import products from "../assets/data/products";
 import ProductsLists from '../components/UI/ProductsList';
 
 const Shop = () => {
 
-  const [productsData, setProductsData] = useState(products);
+  const [productsData, setProductsData] = useState([]);
+  
+  useEffect(() => {
+    axios.get('http://localhost:8080/products/all').then((res)=>{
+      let products= res.data
+      setProductsData(products);
+    })},[])  
+
 
   const handleFilter = (e)=>{
     const filterValue = e.target.value
     /*여기서 if문은 카테고리 입력에 따른 업데이트*/
-      if(filterValue==="sofa"){
-        const filteredProducts = products.filter(
-          (item) => item.category ==="sofa"
+      if(filterValue==="청주"){
+        const filteredProducts = productsData.filter(
+          (item) => item.category ==="청주"
         );
           setProductsData(filteredProducts);
       }
-          if(filterValue==="mobile"){
-        const filteredProducts = products.filter(
-          (item) => item.category ==="mobile"
+          if(filterValue==="막걸리"){
+        const filteredProducts = productsData.filter(
+          (item) => item.category ==="막걸리"
         );
           setProductsData(filteredProducts);
       }
-          if(filterValue==="chair"){
-        const filteredProducts = products.filter(
-          (item) => item.category ==="chair"
+          if(filterValue==="양주"){
+        const filteredProducts = productsData.filter(
+          (item) => item.category ==="양주"
         );
           setProductsData(filteredProducts);
       }
-          if(filterValue==="watch"){
-        const filteredProducts = products.filter(
-          (item) => item.category ==="watch"
+          if(filterValue==="맥주"){
+        const filteredProducts = productsData.filter(
+          (item) => item.category ==="맥주"
         );
           setProductsData(filteredProducts);
       }
-          if(filterValue==="wireless"){
-        const filteredProducts = products.filter(
-          (item) => item.category ==="wireless"
+          if(filterValue==="와인"){
+        const filteredProducts = productsData.filter(
+          (item) => item.category ==="와인"
         );
           setProductsData(filteredProducts);
       }
@@ -54,7 +60,7 @@ const Shop = () => {
   const handleSearch = e=>{
     const searchTerm = e.target.value
 
-    const searchedProducts = products.filter(item=> item.productName.toLowerCase().includes(searchTerm.toLowerCase()))
+    const searchedProducts = productsData.filter(item=> item.productName.toLowerCase().includes(searchTerm.toLowerCase()))
 
     setProductsData(searchedProducts)
   };
@@ -71,11 +77,11 @@ const Shop = () => {
             <div className="filter__widget">
               <select onChange={handleFilter}>
                 <option>종류별 카테고리</option>
-                <option value="sofa">Sofa</option>
-                <option value="mobile">Mobile</option>
-                <option value="chair">Chair</option>
-                <option value="watch">Watch</option>
-                <option value="wireless">Wireless</option>
+                <option value="청주">청주</option>
+                <option value="막걸리">막걸리</option>
+                <option value="양주">양주</option>
+                <option value="맥주">맥주</option>
+                <option value="와인">와인</option>
               </select>
             </div>
             </Col>
