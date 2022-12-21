@@ -77,7 +77,7 @@ req.session.user_id = user[0].user_id;
 
 req.session.save(function () {
 
-    res.redirect(`/`);
+    res.redirect(`http://localhost:3000/home`);
 });
 
 });
@@ -86,7 +86,7 @@ req.session.save(function () {
 
 router.get('/logout', function (req, res) {
     req.session.destroy(function (err) {
-        res.redirect('/main');
+        res.redirect('http://localhost:3000/home');
     });
 });
 

@@ -29,7 +29,8 @@ app.use(session({
   secret: 'keyboard cat',
 resave: true,
 proxy: true,
-saveUninitialized: true
+saveUninitialized: true,
+store: new FileStore
 }));
 
 // 인증 라우터

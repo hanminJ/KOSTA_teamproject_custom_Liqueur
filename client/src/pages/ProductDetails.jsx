@@ -2,6 +2,7 @@ import React, {useState,useRef} from "react";
 import axios from 'axios';
 import {Container, Row,Col} from "reactstrap";
 import { useParams } from "react-router-dom";
+
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 import "../styles/product-details.css";
@@ -18,49 +19,39 @@ const  ProductDetails = () => {
   const reviewUser = useRef("");
   const reviewMsg = useRef("");
   const dispatch = useDispatch()
-
-  const [productsData, setProductsData] = useState([]);
   const[rating,setRating] = useState(null);
-  const {id} = useParams()
+  
 
-  useEffect(function(){
-      axios.get(`http://localhost:8080/products/get_by_id`,{params: {product_id:id}},{ withCredentials: true })
-      .then(result=> {
-          console.log(result);
-          const data = result.data;
-          console.log(data);
-          setProductsData(data);
-      })
-      .catch(e=> {
-          console.log(e);
-      })
-  }, [id])
-
-
-    // axios.post(`http://localhost:8080/products/get_by_id`,{product:'2'}).then((res) => {
-    //   console.log(res);
-    //   let products= res.data;
-    //   setProductsData(products)
-    // });
  
+  // const {id} = useParams();
+  // const [products, setProductsData] = useState({});
 
+  // useEffect(() => {
+  //   axios.get(`http://localhost:8080/products/getbyid/${id}`).then((res) => {
+  //     let product= res.data[0]
+  //     console.log(product);
+  //     setProductsData(product);
+  //   })},[id])  
 
+  const [products, setProductsData] = useState({});
+  const { dataId } = useParams();
 
-
-  const product = productsData;
-  console.log(productsData)
-  const {
-    image, 
-    title,
-    price, 
-    avgRating,
-    reviews, 
-    description,
-    shortDesc,
-    category
-    } = product;
+  useEffect(() => {
+    axios.get(`/api/data/data_id?id=${dataId}&type=single`).then((res) => {
+      let product= res.data[0]
+      console.log(product);
+      setProductsData(product);
+    });
+  }, [dataId]);
     
-    const relatedProducts = productsData.filter(item=> item.category===category);
+  // useEffect(() => {
+  //   axios.get('http://localhost:8080/products/all').then((res)=>{
+  //     let products= res.data
+  //     setProductsData(products);
+  //   })},[id])  
+  
+
+    const relatedProducts = products.filter(item=> item.category===products.category);
 
     const submitHandler =(e)=>{
       e.preventDefault();
@@ -83,10 +74,10 @@ const  ProductDetails = () => {
     const addToCart = () => {
       dispatch(
         cartActions.addItem({
-        id,
-        image,
-        title,
-        price,
+        id:products.product_id,
+        image:products.image,
+        productsName:products.title,
+        price:products.price,
       })
       );
     
@@ -95,20 +86,20 @@ const  ProductDetails = () => {
   
   useEffect(() => {
     window.scrollTo(0,0);
-  }, [product]);
+  }, [products]);
   return (
-          <Helmet title={title}>{/*상품명이 헤더에 나옴*/}
-            <CommonSection title={title}/>
+          <Helmet title={products.title}>{/*상품명이 헤더에 나옴*/}
+            <CommonSection title={products.title}/>
             <section className="pt-0">
               <Container>
                 <Row>
                   <Col lg="6">
-                    <img src={image} alt="" />
+                    <img src={products.image} alt="" />
                   </Col>
 
                   <Col lg="6">
                     <div className="product__details">
-                      <h2>{title}</h2>
+                      <h2>{products.title}</h2>
                       <div className="product__rating d-flex align-items-center gap-5 mb-3">
                         <div>
                           <span ><i class="ri-star-s-fill"></i></span>
@@ -118,13 +109,13 @@ const  ProductDetails = () => {
                            <span ><i class="ri-star-half-s-line"></i></span>
                         </div>
 
-                        <p><span>{avgRating}</span>Ratings</p>
+                        <p><span>{products.funding}</span>Ratings</p>
                       </div>
                      <div className="d-flex align-items-center gap-5">
-                       <span className="product__price"> ₩{price}</span>
-                       <span>종류:{category}</span>
+                       <span className="product__price"> ₩{products.price}</span>
+                       <span>종류:{products.category}</span>
                      </div>
-                      <p className="mt-3">{shortDesc}</p>
+                      <p className="mt-3">{products.product_detail}</p>
                       
                       <motion.button whileTap={{scale: 1.2}} className="buy__btn" onClick={addToCart}>장바구니에 담기
                       </motion.button>
@@ -143,20 +134,20 @@ const  ProductDetails = () => {
                         onClick={()=>setTab('desc')}>제품 설명</h6>
                        <h6 className={`${tab ==="rev" ? "active__tab" : ""}`}
                         onClick={()=>setTab('rev')}>
-                        리뷰 ({reviews.length})</h6>
+                        리뷰 ({products.reviews.length})</h6>
                     </div>
 
                     
                       {tab==='desc' ?  (
                       <div className="tab__content mt-5">
-                      <p>{description}</p>
+                      <p>{products.product_detail}</p>
                     </div> 
                    ) : (
                     <div className="product__review mt-5">
                       <div className="review__wrapper">
                         <ul>
                           {
-                            reviews?.map((item,index)=> (
+                            products.reviews?.map((item,index)=> (
                               <li kew={index} className="mb-4">
                                 <h6>John Doe</h6>
                                 <span>{item.Rating}{rating}</span>

@@ -88,7 +88,7 @@ const Header = () => {
             </ul>
           </div>
           <div className="nav__icons">
-
+                    <a href="http://localhost:8080/auth/naver">naver</a>
             {/*상단 우측 뱃지들*/}
             <span className="fav__icon"><i class="ri-heart-line"></i><span className="badge">2</span>
             </span>
