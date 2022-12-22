@@ -18,8 +18,10 @@ const ProductDetails = () => {
   
     const [tab, setTab] = useState('desc')
     const { id } = useParams()
-
+    const dispatch = useDispatch()
     const [product, setproduct] = useState([]);
+
+
 
             useEffect(() => {
             axios.get(`http://localhost:8080/products/getbyid/${id}`).then((response) => {
@@ -29,9 +31,8 @@ const ProductDetails = () => {
               } else {
                 alert("상세 정보 가져오기를 실패했습니다.");
               }
-            })},[])
+})},[])
             console.log(product);
-
 
 
     const { image, title, price,product_detail, brand, category } = {image:product.image,
@@ -41,6 +42,23 @@ const ProductDetails = () => {
                                                                     brand:product.brand,
                                                                     category:product.category}
   
+    const addToCart = () => {
+        dispatch(cartActions.addItem(
+            {
+                id,
+                image,
+                title,
+                price
+            }
+        ))
+            
+        toast.success("Product added successfully")
+    }
+    useEffect(() => {
+        window.scrollTo(0, 10)
+    }, [product])
+
+   
     return (
  
         <Helmet title={title}>
@@ -80,7 +98,7 @@ const ProductDetails = () => {
                                     <span>Category: {category}</span>
                                 </div>
                                 <p className='mt-3'>{brand}</p>
-                                {/* <motion.button whileTap={{ scale: 1.2 }} className='buy__btn' onClick={addToCart}>Add to Cart</motion.button>6 */}
+                                <motion.button whileTap={{ scale: 1.2 }} className='buy__btn' onClick={addToCart}>Add to Cart</motion.button>6
                             </div>
                         </Col>
                     </Row>

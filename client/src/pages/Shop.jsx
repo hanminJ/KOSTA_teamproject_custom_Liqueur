@@ -19,6 +19,7 @@ const Shop = () => {
     })},[])  
 
 
+    
   const handleFilter = (e)=>{
     const filterValue = e.target.value
     /*여기서 if문은 카테고리 입력에 따른 업데이트*/
@@ -52,7 +53,7 @@ const Shop = () => {
         );
           setProductsData(filteredProducts);
       }
-      
+
       
       
   };
@@ -64,7 +65,6 @@ const Shop = () => {
 
     setProductsData(searchedProducts)
   };
-
 
   return(
     <Helmet title="Shop">
