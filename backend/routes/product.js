@@ -24,11 +24,8 @@ router.get('/hotsale', (req, res) => {
 router.get('/getbyid/:id', (req, res) => {
     //product_id를 이용해 DB에서 같은 id를 가진 정보를 가져온다
     let product_id = req.params.id;
-    
       db.query("select * from product where product_id=?",[product_id], (error, results, fields) => {
-        console.log(results);
         res.send(results);});
-        
       })
 
 
