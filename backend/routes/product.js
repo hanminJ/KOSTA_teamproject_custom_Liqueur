@@ -19,8 +19,15 @@ router.get('/hotsale', (req, res) => {
     })
     })
 
-
-//펀딩 상세페이지    
+// //펀딩 상세페이지    되던거
+// router.get('/getbyid', (req, res) => {
+//     //product_id를 이용해 DB에서 같은 id를 가진 정보를 가져온다
+//     let type = req.query.type;
+//     let product_id = req.query.id;
+//       db.query("select * from product where product_id=?",[product_id], (error, results, fields) => {
+//         res.send(results);});
+//       })
+//펀딩 상세페이지    되던거
 router.get('/getbyid/:id', (req, res) => {
     //product_id를 이용해 DB에서 같은 id를 가진 정보를 가져온다
     let product_id = req.params.id;

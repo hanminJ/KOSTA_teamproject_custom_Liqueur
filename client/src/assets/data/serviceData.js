@@ -1,13 +1,13 @@
 const serviceData = [
   {
     icon: "ri-truck-line",
-    title: "Free Shipping",
-    subtitle: "Lorem ipsum dolor sit amet.",
+    title: "무료 배송",
+    subtitle: "편하게 집에서 무료로 배송받으세요",
     bg: "#fdefe6",
   },
   {
     icon: "ri-refresh-line",
-    title: "Easy Returns",
+    title: "쉬운 반품",
     subtitle: "Lorem ipsum dolor sit amet.",
     bg: "#ceebe9",
   },

@@ -15,45 +15,34 @@ const ProductDetails = () => {
 
 
   
-  const [product, setproduct] = useState(null);
-
-
-
+  
     const [tab, setTab] = useState('desc')
     const { id } = useParams()
-    
-    
-    const dispatch = useDispatch()
 
+    const [product, setproduct] = useState([]);
 
-    useEffect(() => {
-        axios.get(`http://localhost:8080/products/getbyid/${id}`)
-            .then(response => {
-                console.log(response.data[0])
+            useEffect(() => {
+            axios.get(`http://localhost:8080/products/getbyid/${id}`).then((response) => {
+              if (response.data) {
+                console.log(response.data[0]);
                 setproduct(response.data[0]);
-            })},[id])
+              } else {
+                alert("상세 정보 가져오기를 실패했습니다.");
+              }
+            })},[])
+            console.log(product);
 
-            console.log(product)
 
-    const { image, title, price,product_detail, brand, category } = {image:'../images/붉은 차나락.png',title:'붉은 차나락',price:'20000',product_detail:'붉은 차니락',brand:'정한민',category:'막걸리'}
+
+    const { image, title, price,product_detail, brand, category } = {image:product.image,
+                                                                    title:product.title,
+                                                                    price:product.price,
+                                                                    product_detail:product.product_detail,
+                                                                    brand:product.brand,
+                                                                    category:product.category}
   
-    const addToCart = () => {
-        dispatch(cartActions.addItem(
-            {
-                id,
-                image,
-                title,
-                price
-            }
-        ))
-            
-        toast.success("Product added successfully")
-    }
-    useEffect(() => {
-        window.scrollTo(0, 110)
-    }, [product])
-    
     return (
+ 
         <Helmet title={title}>
             <CommoSection title={title} />
             <section>
@@ -91,7 +80,7 @@ const ProductDetails = () => {
                                     <span>Category: {category}</span>
                                 </div>
                                 <p className='mt-3'>{brand}</p>
-                                <motion.button whileTap={{ scale: 1.2 }} className='buy__btn' onClick={addToCart}>Add to Cart</motion.button>
+                                {/* <motion.button whileTap={{ scale: 1.2 }} className='buy__btn' onClick={addToCart}>Add to Cart</motion.button>6 */}
                             </div>
                         </Col>
                     </Row>
@@ -124,6 +113,8 @@ const ProductDetails = () => {
                 </Container>
             </section>
         </Helmet >
+       
+
     )
 }
 

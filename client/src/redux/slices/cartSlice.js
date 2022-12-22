@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios';
 
 const initialState = {
     cartItems: [],
@@ -19,6 +20,7 @@ const cartSlice = createSlice({
             state.totalQuantity++
 
             if (!existingItem) {
+                // axios.post('http://localhost:8080/scarpbook/add',{user_id:'1',product_id:newItem.id}).then(re)
                 state.cartItems.push({
                     id: newItem.id,
                     productName: newItem.productName,
@@ -26,6 +28,7 @@ const cartSlice = createSlice({
                     price: newItem.price,
                     quantity: 1,
                     totalPrice: newItem.price
+                    
                 })
             }
 
