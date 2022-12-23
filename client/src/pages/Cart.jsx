@@ -9,12 +9,12 @@ import '../styles/cart.css'
 import { cartActions } from '../redux/slices/cartSlice'
 import { Link } from 'react-router-dom'
 const Cart = () => {
-
+    
     const carItems = useSelector(state => state.cart.cartItems)
     const totalAmount = useSelector(state => state.cart.totalAmount)
     return (
         <Helmet title='Cart'>
-            <CommoSection title='Shopping Cart' />
+            <CommoSection title='쇼핑카트' />
             <section>
                 <Container>
                     <Row>
@@ -24,11 +24,11 @@ const Cart = () => {
                                     <table className='table bordered'>
                                         <thead>
                                             <tr>
-                                                <th>Image</th>
-                                                <th>Title</th>
-                                                <th>Price</th>
-                                                <th>Qty</th>
-                                                <motion.th whileTap={{ scale: 1.2 }}>Delete</motion.th>
+                                                <th>상품</th>
+                                                <th>상품명</th>
+                                                <th>가격</th>
+                                                <th>수량</th>
+                                                <motion.th whileTap={{ scale: 1.2 }}>삭제</motion.th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -45,15 +45,15 @@ const Cart = () => {
                         </Col>
                         <Col lg='3'>
                             <div>
-                                <h6 className='d-flex align-items-center justify-content-between'>Subtotal
+                                <h6 className='d-flex align-items-center justify-content-between'>예상금액
                                     <span className='fs-4 fw-bold'>${totalAmount}</span>
                                 </h6>
                             </div>
-                            <p className='fs-6 mt-2'>taxes and shipping will calculate in checkout</p>
+                            <p className='fs-6 mt-2'>배송료와 합계비용은 계산서에서 확인하세요</p>
                             <div>
-                                <button className='buy__btn w-100'><Link className='' to='/checkout'>Checkout</Link>
+                                <button className='buy__btn w-100'><Link className='' to='/checkout'>주문</Link>
                                 </button>
-                                <button className='buy__btn w-100'><Link className='' to='/shop'>Continue Shopping</Link>
+                                <button className='buy__btn w-100'><Link className='' to='/shop'>쇼핑 계속</Link>
                                 </button>
                             </div>
                         </Col>

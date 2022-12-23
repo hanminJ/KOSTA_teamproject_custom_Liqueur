@@ -1,15 +1,16 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef,useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Container, Row } from 'reactstrap'
 import logo from '../../assets/images/teamlogo.png';
 import userIcon from '../../assets/images/user-icon.png'
-import useAuth from '../../custom-hooks/useAuth'
 import { motion } from 'framer-motion'
 import './header.css'
-import { signOut } from 'firebase/auth'
 import { toast } from 'react-toastify'
-import { auth } from '../../firebase.config'
+import axios from 'axios'
+
+axios.defaults.withCredentials = true;
+
 const nav__links = [
     {
         path: 'home',
@@ -29,8 +30,21 @@ const Header = () => {
     const menuRef = useRef(null)
     const totalQuantity = useSelector(state => state.cart.totalQuantity)
     const navigate = useNavigate()
-    const { currentUser } = useAuth()
     const profileActionsRef = useRef(null)
+    const [currentUser, setCurrenUser] = useState({})
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/authcheck').then((res)=>{
+            var user =res.data 
+            console.log(user)
+        if (user) {
+            setCurrenUser(user)
+        } else {
+            setCurrenUser(null)
+        }})
+    })
+    
+
     const stickyHeaderFunc = () => {
         window.addEventListener('scroll', () => {
             if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
@@ -42,9 +56,10 @@ const Header = () => {
     }
 
     const logout = () => {
-        signOut(auth).then(() => {
+        axios.get('http://localhost:8080/logout').then((res) => {
+            console.log(res)
             toast.success('Logged out')
-            navigate('/home')
+            setCurrenUser(null)            
         }).catch(err => {
             toast.error(err.message)
         })
@@ -106,10 +121,11 @@ const Header = () => {
                             </div>
                             <div className='profile'>
                                 {/*클릭시 유저아이콘 움직임*/}    
-                                <motion.img whileTap={{ scale: 1.2 }} src={currentUser ? currentUser.photoURL : userIcon} alt="" onClick={toggleProfileActions} />
+                                <motion.img whileTap={{ scale: 1.2 }} src={userIcon} alt="" onClick={toggleProfileActions} />
                                 <div className='profile__actions ' ref={profileActionsRef} onClick={toggleProfileActions}>
                                     {
-                                        currentUser ? <span onClick={logout}>Logout</span> : <div className='d-flex align-items-center justify-content-center flex-column'>
+                                        currentUser ? <span onClick={logout}>Logout</span> : 
+                                        <div className='d-flex align-items-center justify-content-center flex-column'>
                                             <Link to='/signup'>Signup</Link>
                                             <Link to='/login'>Login</Link>
                                         </div>

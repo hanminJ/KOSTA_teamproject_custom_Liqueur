@@ -95,10 +95,10 @@ const ProductDetails = () => {
                                 </div>
                                 <div className='d-flex align-items-center gap-5'>
                                     <span className='product__price'>${price}</span>
-                                    <span>Category: {category}</span>
+                                    <span>카테고리: {category}</span>
                                 </div>
                                 <p className='mt-3'>{brand}</p>
-                                <motion.button whileTap={{ scale: 1.2 }} className='buy__btn' onClick={addToCart}>Add to Cart</motion.button>6
+                                <motion.button whileTap={{ scale: 1.2 }} className='buy__btn' onClick={addToCart}>Add to Cart</motion.button>
                             </div>
                         </Col>
                     </Row>

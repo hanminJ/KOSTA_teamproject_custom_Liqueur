@@ -1,19 +1,18 @@
-import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { auth } from '../firebase.config'
+import axios from 'axios'
 
 const useAuth = () => {
     const [currentUser, setCurrenUser] = useState({})
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setCurrenUser(user)
-            } else {
-                setCurrenUser(null)
-            }
-        })
+        axios.get('http://localhost:8080/authcheck').then((res)=>{
+            var user =res.data 
+        if (user) {
+            setCurrenUser(user)
+        } else {
+            setCurrenUser(null)
+        }})
     })
     return {
         currentUser,

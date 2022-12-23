@@ -4,6 +4,8 @@ var express = require('express')
 , passport = require('passport')
 , session = require('express-session')
 , NaverStrategy = require('passport-naver').Strategy;
+const cors = require('cors');
+var authCheck = require('./authCheck.js');
 
 const db   = require('../config/database');
 
@@ -12,8 +14,8 @@ passport.serializeUser(function(user, done) { //인증 요청 이후 세션기�
 	done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) { //세션기록 얻어옴
-	done(null, obj);
+passport.deserializeUser(function(user, done) { //세션기록 얻어옴
+	done(null, user);
 });
 
 
@@ -85,9 +87,25 @@ req.session.save(function () {
 });
 
 router.get('/logout', function (req, res) {
-    req.session.destroy(function (err) {
-        res.redirect('http://localhost:3000/home');
-    });
+  
+  if(req.session.user_id){
+    req.session.destroy(function(err){ //req.session.destroy 메소드: session 삭제 메소드
+        if(err){
+            console.log(err);
+        }else{
+          res.clearCookie('sid')
+          res.send("접속 O")
+            res.redirect('http://localhost:3000/home'); // logout 해서 session 삭제완료 되면 에러가 나지 않았을 경우 main 페이지로 redirect
+        }
+    })
+}else{
+    res.redirect('http://localhost:3000/home');
+}
+    // req.session.destroy(function (err) {
+    //   
+    //   res.send("성공")
+    //     res.redirect('http://localhost:3000/home');
+    // });
 });
 
 function ensureAuthenticated(req, res, next) {
@@ -98,7 +116,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 // 회원가입 프로세스 아직 미완료
-router.post('/register', function(req, res) {    
+router.post('/signup', function(req, res) {    
     var email = req.session.joinUser.email;
     var id = req.session.joinUser.id;   
     var age = req.session.joinUser.age;
@@ -117,5 +135,15 @@ router.post('/register', function(req, res) {
         res.send(`<script type="text/javascript">alert("입력되지 않은 정보가 있습니다."); </script>`);
     }
 });
+
+router.get('/authcheck',function(req,res){
+  console.log(req.session.user_id)
+  if (req.session.user_id) {
+    
+    return res.send('true');
+  } else {
+    return res.send('false');
+  }
+})
 
 module.exports = router;

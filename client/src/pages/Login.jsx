@@ -47,10 +47,14 @@ const Login = () => {
                                     <FormGroup className='form__group'>
                                         <input type="password" placeholder='Enter your password' value={password} onChange={e => setPassword(e.target.value)} />
                                     </FormGroup>
-
+                                    <div>
                                     <button type='submit' className='buy__btn auth__btn'>
                                         Login
                                     </button>
+                                    <a href="http://localhost:8080/auth/naver">
+                                    <button type="button" className="btm_image" id="img_btn" >
+                                        <img src='../images/네아로로그인.png'  style={{height:80,width:200}} alt='네이버'></img></button></a>
+                                    </div>
                                     <p>Don't have an account? <Link className='' to='/signup'>Create an account</Link></p>
                                 </Form>
                             </Col>

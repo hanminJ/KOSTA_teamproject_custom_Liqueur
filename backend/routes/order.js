@@ -6,13 +6,15 @@ const db = require('../config/database');
 router.post('/buy', (req, res) => {
     var product_id =req.body.product_id;
     var user_id =req.session.user_id;
-    var seller_id =req.body.seller_id;
+    var seller_id =1;
     var quantity =req.body.quantity;
     var price =req.body.price;
+    var address = req.body.address;
+    console.log(user_id)
 
-    db.query('INSERT INTO order (product_id, user_id,seller_id,quantity,status,price) VALUES(?,?,?,?,1,?)', [product_id, user_id,seller_id,quantity,price], function (error, data) {
+    db.query('INSERT INTO order (product_id, user_id,seller_id,quantity,price,memo) VALUES(?,?,?,?,?,?)', [product_id, user_id,seller_id,quantity,price,address], function (error, data) {
         if(error) console.log(error);
-
+        res.send('주문성공');
         })
 
   })
