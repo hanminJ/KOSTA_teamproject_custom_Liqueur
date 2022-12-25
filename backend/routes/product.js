@@ -18,6 +18,11 @@ router.get('/hotsale', (req, res) => {
          res.send(results);
     })
     })
+router.get('/trending', (req, res) => {
+        db.query("select * from product order by created_at DESC limit 0, 4", (error, results, fields) => {
+            res.send(results);
+        })
+        })
 
 // //펀딩 상세페이지    되던거
 // router.get('/getbyid', (req, res) => {

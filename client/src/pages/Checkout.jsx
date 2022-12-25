@@ -14,8 +14,9 @@ const Checkout = () => {
     const carItems = useSelector(state => state.cart.cartItems)
     const totalQty = useSelector(state => state.cart.totalQuantity)
     const totalAmount = useSelector(state => state.cart.totalAmount)
-    const [email, setEmail] = useState('')
-    const [adress, setadress] = useState('')
+    const [name, setName] = useState('')
+    const [adress, setAdress] = useState('')
+    const [number, setNumber] = useState('')
   
    
     const f1 = () => {
@@ -24,7 +25,7 @@ const Checkout = () => {
                                                      quantity:carItems.quantity,
                                                      price:carItems.price,
                                                     adress:adress}).then((res) => {
-            
+        console.log(res)
             toast.success('주문성공')
           
         }).catch(err => {
@@ -71,25 +72,13 @@ const Checkout = () => {
                             </h6>
                             <Form className='billing__form'>
                                 <FormGroup className='form__group'>
-                                    <input type="text" placeholder='성함' />
+                                    <input type="text" placeholder='배송 받는분 성함' value={name} onChange={e => setName(e.target.value)}/>
                                 </FormGroup>
                                 <FormGroup className='form__group'>
-                                    <input type="email" placeholder='Enter your email' value={email} onChange={e => setEmail(e.target.value)} />
+                                    <input type="text" placeholder='배송지 ' value={adress} onChange={e => setAdress(e.target.value)} />
                                 </FormGroup>
                                 <FormGroup className='form__group'>
-                                    <input type="number" placeholder='Enter your number' />
-                                </FormGroup>
-                                <FormGroup className='form__group'>
-                                    <input type="text" placeholder='Street address' value={adress} onChange={e => setadress(e.target.value)} />
-                                </FormGroup>
-                                <FormGroup className='form__group'>
-                                    <input type="text" placeholder='City' />
-                                </FormGroup>
-                                <FormGroup className='form__group'>
-                                    <input type="text" placeholder='Postal code' />
-                                </FormGroup>
-                                <FormGroup className='form__group'>
-                                    <input type="text" placeholder='Country' />
+                                    <input type="number" placeholder='배송지 전화번호' value={number} onChange={e => setNumber(e.target.value)}/>
                                 </FormGroup>
                             </Form>
                         </Col>

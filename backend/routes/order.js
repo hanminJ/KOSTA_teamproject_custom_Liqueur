@@ -6,11 +6,11 @@ const db = require('../config/database');
 router.post('/buy', (req, res) => {
     var product_id =req.body.product_id;
     var user_id =req.session.user_id;
-    var seller_id =1;
+    var seller_id =2;
     var quantity =req.body.quantity;
     var price =req.body.price;
     var address = req.body.address;
-    console.log(user_id)
+    console.log(quantity)
 
     db.query('INSERT INTO order (product_id, user_id,seller_id,quantity,price,memo) VALUES(?,?,?,?,?,?)', [product_id, user_id,seller_id,quantity,price,address], function (error, data) {
         if(error) console.log(error);
@@ -18,6 +18,7 @@ router.post('/buy', (req, res) => {
         })
 
   })
+  
   //취소시 status = 0으로 표시 
   router.post('/cancel', (req, res) => {
     var order_id =req.body.order_id;
