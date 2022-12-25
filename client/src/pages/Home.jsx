@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import products from '../assets/data/products';
+
 
 import Helmet from "../components/Helmet/Helmet";
 import "../styles/home.css";
@@ -37,30 +37,10 @@ const Home = () => {
     })},[])
 
 
-  const [mobileProducts, setMobileProducts] =useState([]);
-  const [wirelessProducts, setWirelessProducts] =useState([]);
-   const [popularProducts, setPopularProducts] =useState([]);
-  
   
   const year = new Date().getFullYear(); /*각해에 맞게 업데이트됨*/
 
-  useEffect(()=>{
-      const filteredMobileProducts = products.filter(
-      (item)=> item.category === "mobile"
-      );
-
-      const filteredWirelessProducts = products.filter(
-      (item)=> item.category === "wireless"
-      );
-
-      const filteredPopularProducts = products.filter(
-      (item)=> item.category === "wireless"
-      );
-
-      setMobileProducts(filteredMobileProducts);
-       setWirelessProducts(filteredWirelessProducts);
-       setPopularProducts(filteredPopularProducts);
-  },[]);
+ 
   
   return (
   <Helmet title={"Home"}>
@@ -131,28 +111,6 @@ const Home = () => {
            </Col>
       </Row>
     </Container>
-    </section>
-    <section className="new__arrivals">
-      <Container>
-        <Row>
-          <Col lg='12' className="text-center mb-5">
-          <h2 className="section__title">신상품</h2>
-        </Col>  
-        <ProductsList data = {mobileProducts}/>
-         <ProductsList data = {wirelessProducts}/>
-        </Row>
-      </Container>
-    </section>
-    <section className="popular__category">
-       <Container>
-        <Row>
-          <Col lg='12' className="text-center mb-5">
-          <h2 className="section__title">인기 상품</h2>
-        </Col>  
-        <ProductsList data = {popularProducts}/>
-         <ProductsList data = {wirelessProducts}/>
-        </Row>
-      </Container>
     </section>
   </Helmet>
   );

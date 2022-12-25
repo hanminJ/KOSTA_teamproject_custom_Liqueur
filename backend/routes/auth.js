@@ -7,6 +7,7 @@ var express = require('express')
 const cors = require('cors');
 var authCheck = require('./authCheck.js');
 
+
 const db   = require('../config/database');
 
 
@@ -25,19 +26,22 @@ passport.use(new NaverStrategy({
     callbackURL: 'http://localhost:8080/callback'
 },
 function(accessToken, refreshToken, profile, done) {
-  console.log(profile._json.id)
-  let provider_id = profile._json.id;
-  db.query('SELECT * from user where provider_id =?',[provider_id], (error, results, fields) => {
+  var provider_id=profile._json.id;
+  console.log('id값 : ',provider_id)
 
-    if (error) throw error;
-    if (results) {   // db에서의 반환값이 있으면 로그인 성공
-      var user = results;
-      return done(null, user); // 등록된 사용자 정보가 존재할 경우
-    }   
-    else {
-      return done(null, false, profile); 
-    }  // 등록된 사용자 정보가 존재하지 않을 경우, 클라이언트에 사용자 정보를 전달해주기 위해 세번째 인자로 사용자 정보를 넣어준다.    
- })
+    db.query('SELECT * from user where provider_id =?',[provider_id], (error, results, fields) => {
+      console.log('results값 확인',results)
+      if (results[0]) {   // db에서의 반환값이 있으면 로그인 성공
+        console.log('db에 값이 있을때')
+        var user = results[0];
+        return done(null, user); // 등록된 사용자 정보가 존재할 경우
+      }
+      else{
+        console.log('db에 값이 없을때')
+        return done(null, false, profile);}
+   })
+ // 등록된 사용자 정보가 존재하지 않을 경우, 클라이언트에 사용자 정보를 전달해주기 위해 세번째 인자로 사용자 정보를 넣어준다.    
+ 
 }
 )
 );
@@ -50,39 +54,37 @@ passport.authenticate('naver', null), function(req, res) {
 
 router.get('/callback', (req, res, next)=>{
 passport.authenticate('naver', (err, user,profile) => { // passport-naver 전략 done 함수의 파라미터가 여기 콜백 함수의 인자로 전달된다.
-if (err) {
-return next(err);
-}
 
 if (!user) { 
 // 등록된 회원 정보가 없을 경우 profile 파라미터에 전달된 사용자 정보를 이용해 세션을 생성한다.
+console.log('user없을때 ',profile)
 req.session.joinUser = {
   email: profile._json.email,
-  nickname: profile._json.nickname,
-  age: profile._json.age,
   id: profile._json.id,
+  age: profile._json.birth,
 };
 return req.session.save(() => {
   // 세션이 생성되면 사용자를 회원가입 페이지로 리다이렉트 시킨다.
-  res.redirect(`/register`);
+  res.redirect(`http://localhost:3000/signup`);
 });
 }
-
+else
+{
+  console.log('user있을때 ',user)
+  return req.login(user, (error) => {
+  if (error) {
+    next(error);
+  }
+  req.session.is_logined = true;
+  req.session.user_id = user.user_id;
+  req.session.save(function () {
+      res.redirect(`http://localhost:3000/home`);
+  });
+  
+  });
+}
 // 회원가입된 상태일 경우, 로그인 세션을 생성한다.
-return req.login(user, (error) => {
-if (error) {
-  next(error);
-}
-
-req.session.is_logined = true;
-req.session.user_id = user[0].user_id;
-
-req.session.save(function () {
-
-    res.redirect(`http://localhost:3000/home`);
-});
-
-});
+  
 })(req, res, next); // 미들웨어 내의 미들웨어에는 호출 별도로 진행
 });
 
@@ -117,27 +119,26 @@ function ensureAuthenticated(req, res, next) {
 
 // 회원가입 프로세스 아직 미완료
 router.post('/signup', function(req, res) {    
+    console.log('signup :세션' , req.session.joinUser)
     var email = req.session.joinUser.email;
     var id = req.session.joinUser.id;   
     var age = req.session.joinUser.age;
-    var nickname = req.session.joinUser.nickname;
-
-    if (email && birth && nickname) {
-        db.query('INSERT INTO user (email, age,nickname,provider_id) VALUES(?,?,?)', [email, age,nickname, id], function (error, data) {
-                    if (error) throw error2;
-                        res.send(`<script type="text/javascript">alert("회원가입이 완료되었습니다! 다시 로그인해주세요");</script>`);
-                        res.redirect("/");
-                    
+    var nickname = req.body.nickname;
+    var adress = req.body.adress;
+    var P_number = req.body.number;
+  
+    if (adress && P_number && nickname) {
+        db.query('INSERT INTO user (email, birth,nickname,provider_id,adress,P_number) VALUES(?,?,?,?,?,?)', [email, age,nickname, id,adress,P_number], function (error, data) {
+                    res.redirect('http://localhost:3000/home')
                 });
             } 
 
     else {        // 입력되지 않은 정보가 있는 경우
-        res.send(`<script type="text/javascript">alert("입력되지 않은 정보가 있습니다."); </script>`);
     }
 });
 
 router.get('/authcheck',function(req,res){
-  console.log(req.session.user_id)
+
   if (req.session.user_id) {
     
     return res.send('true');
