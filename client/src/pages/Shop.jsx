@@ -58,13 +58,12 @@ const Shop = () => {
       
   };
 
-  const handleSearch = f=>{
-    const searchTerm = f.target.value
-
-    const searchedProducts = productsData.filter(item=> item.title.toLowerCase().includes(searchTerm.toLowerCase()))
-
-    setProductsData(searchedProducts)
-  };
+  const handleSearchObj = (e) => {
+    const serachItems = e.target.value;
+    const searchProducts = productsData.filter((item) =>
+      item.title.toLowerCase().includes(serachItems.toLowerCase())
+    );
+    setProductsData(searchProducts)}
 
   return(
     <Helmet title="Shop">
@@ -85,26 +84,13 @@ const Shop = () => {
               </select>
             </div>
             </Col>
-            <Col lg="3" md="6">
-            <div className="filter__widget">
-              <select>
-                <option>Sort by</option>
-                <option value="ascending">Ascending</option>
-                <option value="descending">Descending</option>
-              </select>
-            </div>
-            </Col>
-            <Col lg="6" md="12" className="text-end">
+            <Col lg="6" md="6">
               <div className="search__box">
-                <input 
-                type="text" 
-                placeholder="원하시는 상품 검색" 
-                onchange={handleSearch}
-                />
+                <input type="text" placeholder="Search...." onChange={handleSearchObj} />
                 <span>
                   <i class="ri-search-line"></i>
-                  </span>
-               </div>
+                </span>
+              </div>
             </Col>
           </Row>
         </Container>
