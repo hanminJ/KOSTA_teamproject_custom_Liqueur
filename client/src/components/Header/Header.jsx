@@ -109,10 +109,6 @@ const Header = () => {
                         </div>
                         {/*상단 우측 뱃지들*/}
                         <div className='nav__icons'>
-                            <div className='fav__icon'>
-                                <i class="ri-heart-line"></i>
-                                <span className='badge'>1</span>
-                            </div>
                             
                             {/*장바구니로 이동*/}
                             <div className="cart__icon" onClick={navigateToCart}>
@@ -124,7 +120,10 @@ const Header = () => {
                                 <motion.img whileTap={{ scale: 1.2 }} src={userIcon} alt="" onClick={toggleProfileActions} />
                                 <div className='profile__actions ' ref={profileActionsRef} onClick={toggleProfileActions}>
                                     {
-                                        currentUser ? <span onClick={logout}>Logout</span> : 
+                                        currentUser ? <div className='d-flex align-items-center justify-content-center flex-column'>
+                                            <span onClick={logout}>Logout</span> 
+                                            <Link to='/mypage'>Mypage</Link> 
+                                            </div>: 
                                         <div className='d-flex align-items-center justify-content-center flex-column'>
                                             <Link to='/signup'>Signup</Link>
                                             <Link to='/login'>Login</Link>
