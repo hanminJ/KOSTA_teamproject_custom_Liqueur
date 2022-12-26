@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { Col, Container, Form, FormGroup, Row } from 'reactstrap'
+import { useNavigate } from 'react-router-dom'
 import Helmet from '../components/Helmet/Helmet'
 import CommoSection from '../UI/CommoSection'
 import '../styles/checkout.css'
@@ -23,6 +24,7 @@ const Checkout = () => {
     axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
     // 서로 다른 도메인간 쿠키 전달 허용
     axios.defaults.withCredentials = true;
+    const navigate = useNavigate()
     const f1 = () => {
         console.log(carItems[0].id)
         axios.post('http://localhost:8080/order/buy',{product:carItems,
@@ -32,7 +34,7 @@ const Checkout = () => {
                                                 }).then((res) => {
         console.log(res)
             toast.success('주문성공')
-          
+            navigate('/mypage')
         }).catch(err => {
             toast.error(err.message)
         })

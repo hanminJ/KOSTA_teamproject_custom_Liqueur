@@ -4,7 +4,7 @@ const db = require('../config/database');
 
 // 구매시 status =1로 구매 표시 , price 컬럼 추가
 router.post('/buy', (req, res) => {
-
+  
     const array=req.body.product
     console.log(array)
     var user_id =req.session.user_id;
@@ -16,11 +16,9 @@ router.post('/buy', (req, res) => {
     array.forEach(item => {
       db.query('INSERT INTO `order` (product_id,user_id ,seller_id,quantity,total_price,adress,name,p_number,memo) VALUES(?,?,?,?,?,?,?,?,?) ;', [item.id, user_id,seller_id,item.quantity, item.price ,address,name,number,item.imgUrl], function (error, data) {
         if(error) console.log(error);
-        
         })
     });
-    res.redirect('http://localhost:3000/Mypage');
-    
+    return res.send("완료")
 
   })
   
@@ -34,7 +32,9 @@ router.post('/buy', (req, res) => {
   })
 //주문 목록 가져오기
   router.get('/get', (req, res) => {
+    
     var user_id =req.session.user_id;
+    
     db.query("select * from `order` where user_id=?",[user_id], (error, results, fields) => {
         res.send(results);
   })
