@@ -10,6 +10,8 @@ import { toast } from 'react-toastify'
 
 
 
+
+
 const Checkout = () => {
     const carItems = useSelector(state => state.cart.cartItems)
     const totalQty = useSelector(state => state.cart.totalQuantity)
@@ -18,13 +20,16 @@ const Checkout = () => {
     const [adress, setAdress] = useState('')
     const [number, setNumber] = useState('')
   
-   
+    axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+    // 서로 다른 도메인간 쿠키 전달 허용
+    axios.defaults.withCredentials = true;
     const f1 = () => {
-        
-        axios.post('http://localhost:8080/order/buy',{product_id:carItems.id,
-                                                     quantity:carItems.quantity,
-                                                     price:carItems.price,
-                                                    adress:adress}).then((res) => {
+        console.log(carItems[0].id)
+        axios.post('http://localhost:8080/order/buy',{product:carItems,
+                                                    adress:adress,
+                                                    name:name,
+                                                    number:number,
+                                                }).then((res) => {
         console.log(res)
             toast.success('주문성공')
           
@@ -32,7 +37,7 @@ const Checkout = () => {
             toast.error(err.message)
         })
     };
-    console.log(carItems[0].id)
+    
 
     return (
         <Helmet title='Checkout'>
@@ -78,7 +83,7 @@ const Checkout = () => {
                                     <input type="text" placeholder='배송지 ' value={adress} onChange={e => setAdress(e.target.value)} />
                                 </FormGroup>
                                 <FormGroup className='form__group'>
-                                    <input type="number" placeholder='배송지 전화번호' value={number} onChange={e => setNumber(e.target.value)}/>
+                                    <input type="text" placeholder='배송지 전화번호' value={number} onChange={e => setNumber(e.target.value)}/>
                                 </FormGroup>
                             </Form>
                         </Col>

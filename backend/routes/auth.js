@@ -117,7 +117,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 
-// 회원가입 프로세스 아직 미완료
+// 회원가입 프로세스 완료
 router.post('/signup', function(req, res) {    
     console.log('signup :세션' , req.session.joinUser)
     var email = req.session.joinUser.email;

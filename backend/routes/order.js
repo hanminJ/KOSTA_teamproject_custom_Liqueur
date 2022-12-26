@@ -4,18 +4,23 @@ const db = require('../config/database');
 
 // 구매시 status =1로 구매 표시 , price 컬럼 추가
 router.post('/buy', (req, res) => {
-    var product_id =req.body.product_id;
+
+    const array=req.body.product
+    console.log(array)
     var user_id =req.session.user_id;
     var seller_id =2;
-    var quantity =req.body.quantity;
-    var price =req.body.price;
-    var address = req.body.address;
-    console.log(quantity)
-
-    db.query('INSERT INTO order (product_id, user_id,seller_id,quantity,price,memo) VALUES(?,?,?,?,?,?)', [product_id, user_id,seller_id,quantity,price,address], function (error, data) {
+   
+    var name =req.body.name;
+    var number =req.body.number;
+    var address = req.body.adress;
+    array.forEach(item => {
+      db.query('INSERT INTO `order` (product_id,user_id ,seller_id,quantity,total_price,adress,name,p_number,memo) VALUES(?,?,?,?,?,?,?,?,?) ;', [item.id, user_id,seller_id,item.quantity, item.price ,address,name,number,item.imgUrl], function (error, data) {
         if(error) console.log(error);
-        res.send('주문성공');
+        
         })
+    });
+    res.redirect('http://localhost:3000/Mypage');
+    
 
   })
   
@@ -30,7 +35,7 @@ router.post('/buy', (req, res) => {
 //주문 목록 가져오기
   router.get('/get', (req, res) => {
     var user_id =req.session.user_id;
-    db.query("select * from order where user_id=?",[user_id], (error, results, fields) => {
+    db.query("select * from `order` where user_id=?",[user_id], (error, results, fields) => {
         res.send(results);
   })
 })
