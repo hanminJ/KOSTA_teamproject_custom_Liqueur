@@ -35,10 +35,11 @@ const ProductDetails = () => {
             console.log(product);
 
 
-    const { image, title, price,product_detail, brand, category } = {image:product.image,
+    const { image, title, price,product_detail,product_detail2, brand, category } = {image:product.image,
                                                                     title:product.title,
                                                                     price:product.price,
                                                                     product_detail:product.product_detail,
+                                                                    product_detail2:product.product_detail2,
                                                                     brand:product.brand,
                                                                     category:product.category}
   
@@ -91,7 +92,6 @@ const ProductDetails = () => {
                                             <i className='ri-star-half-fill'></i>
                                         </span>
                                     </div>
-                                    <p>(<span>{3}</span> ratings)</p>
                                 </div>
                                 <div className='d-flex align-items-center gap-5'>
                                     <span className='product__price'>${price}</span>
@@ -112,9 +112,11 @@ const ProductDetails = () => {
                                 <h6 className={`${tab === 'desc' ? 'active__tab' : ''}`}
                                     onClick={() => setTab('desc')}
                                 >상품설명</h6>
+                                <img src={product_detail2} alt="" />
                             </div>
                             {
                                 tab === 'desc' ? (<div className="tab__content mt-5">
+                                    
                                     <p>{product_detail}</p>
                                 </div>) : (
                                     <div className='product__review mt-5'>
@@ -125,7 +127,6 @@ const ProductDetails = () => {
 
                         </Col>
                         <Col lg='12'>
-                            <h2 className='related__title'>You might also like</h2>
                         </Col>
                     </Row>
                 </Container>
