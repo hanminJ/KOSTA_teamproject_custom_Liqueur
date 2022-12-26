@@ -42,8 +42,8 @@ const Checkout = () => {
     
 
     return (
-        <Helmet title='Checkout'>
-            <CommoSection title="Checkout" />
+        <Helmet title='주문'>
+            <CommoSection title="주문" />
             <section>
                 <Container>
                     <Row>

@@ -13,10 +13,6 @@ import customeImg from '../assets/images/custome.jpg';
 import Services from "../components/Services/Services";
 import ProductsList from "../UI/ProductList";
 
-import Clock  from "../UI/Clock";
-
-import counterImg from '../assets/images/counter-timer-img.png';
-
 
 const Home = () => {
   

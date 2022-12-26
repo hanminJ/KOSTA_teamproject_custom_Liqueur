@@ -13,7 +13,7 @@ const ProductCart = ({ item, index }) => {
     const dispatch = useDispatch()
 
     const addToCart = () => {
-        // axios
+        
         dispatch(cartActions.addItem({
             id: item.product_id,
             productName: item.title,
@@ -21,7 +21,7 @@ const ProductCart = ({ item, index }) => {
             imgUrl: item.image
         }))
 
-        toast.success("product added to the cart")
+        toast.success("상품이 카트에 담겼습니다.")
     }
     return (
         <Col lg='3' md='4'>
